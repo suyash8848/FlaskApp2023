@@ -1,15 +1,10 @@
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from flask_wtf.csrf import CSRFProtect
 import os
 import psycopg2
-import uuid
-
-from requests import RequestException
 
 app = Flask(__name__, static_folder='static')
-csrf = CSRFProtect(app)
 
 if not 'RUNNING_IN_PRODUCTION' in os.environ:
    # Local development, where we'll use environment variables.
@@ -27,9 +22,7 @@ with app.app_context():
     )
 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
-
 db = SQLAlchemy(app)
-
 migrate = Migrate(app, db)
 
 class Todo(db.Model):
