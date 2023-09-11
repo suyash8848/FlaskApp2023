@@ -25,9 +25,9 @@ with app.app_context():
         SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
         SQLALCHEMY_TRACK_MODIFICATIONS=False,
     )
-app.secret_key = 'my_secret_key' 
+
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 
 migrate = Migrate(app, db)
