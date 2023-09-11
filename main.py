@@ -1,13 +1,36 @@
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask_wtf.csrf import CSRFProtect
+import os
 import psycopg2
-import webbrowser
+import uuid
 
-app = Flask(__name__)
+from requests import RequestException
+
+app = Flask(__name__, static_folder='static')
+csrf = CSRFProtect(app)
+
+if not 'RUNNING_IN_PRODUCTION' in os.environ:
+   # Local development, where we'll use environment variables.
+   print("Loading config.development and environment variables from .env file.")
+   app.config.from_object('azureproject.development')
+else:
+   # Production, we don't load environment variables from .env file but add them as environment variables in Azure.
+   print("Loading config.production.")
+   app.config.from_object('azureproject.production')
+
+with app.app_context():
+    app.config.update(
+        SQLALCHEMY_DATABASE_URI=app.config.get('DATABASE_URI'),
+        SQLALCHEMY_TRACK_MODIFICATIONS=False,
+    )
 app.secret_key = 'my_secret_key' 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
@@ -67,5 +90,4 @@ def about():
 
 
 if __name__ == "__main__":
-    webbrowser.open('http://localhost:5000/')
     app.run()
