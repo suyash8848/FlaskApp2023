@@ -9,7 +9,12 @@ on:
     paths:
     - '//**'
     - '.github/workflows/python-container-app-AutoDeployTrigger-00723461-6e1c-4197-ab21-d49b58a8bf6a.yml'
-
+    - 'templates/about.html'
+    - 'templates/base.html'
+    - 'templates/error.html'
+    - 'templates/index.html'
+    - 'templates/update.html'
+    - 'app.py'
   # Allow manual trigger 
   workflow_dispatch:      
 
