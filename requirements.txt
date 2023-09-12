@@ -1,11 +1,9 @@
 Flask
+Flask-Migrate
 Flask-SQLAlchemy
-Jinja2
-
-psycopg2
-pyinstaller
-sql
+Flask-WTF
+requests
+psycopg2-binary
+python-dotenv
 SQLAlchemy
-virtualenv
-Werkzeug
-Gunicorn
+gunicorn
