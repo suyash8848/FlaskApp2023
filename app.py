@@ -1,58 +1,48 @@
+from sqlalchemy import create_engine, Column, Integer, String
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 import psycopg2.extras
+import webbrowser
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+
 
 app = Flask(__name__)
 # app.secret_key = 'my_secret_key' 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
+engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
+Session = sessionmaker(bind=engine)
+db_session = Session()
 
-POSTGRES_HOST = 'postgres-app-db.postgres.database.azure.com'
-POSTGRES_DB = 'postgres'
-POSTGRES_USER = 'empadmin'
-POSTGRES_PASSWORD = 'Flask_App_23'
-port_id = 5432
-conn = None
-cur = None
+Base = declarative_base()
 
-try:
-    conn = psycopg2.connect(
-                host = POSTGRES_HOST,
-                dbname = POSTGRES_DB,
-                user = POSTGRES_USER,
-                password = POSTGRES_PASSWORD,
-                port = port_id)
+class Todo(Base):
+    __tablename__ = 'todo'
 
-    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+    sno = Column(Integer, primary_key=True)
+    name = Column(String(40), nullable=False)
+    emp_id = Column(Integer)
 
-    create_script = ''' CREATE TABLE IF NOT EXISTS todo(
-                            sno     int PRIMARY KEY,
-                            name   varchar(40) NOT NULL,
-                            emp_id int) '''
+# Create the table
+Base.metadata.create_all(engine)
 
-    cur.execute(create_script)
-    conn.commit()
-
-except Exception as error:
-    print(error)
-
-finally:
-    if cur is not None:
-        cur.close()
-    if conn is not None:
-        conn.close()
+# Commit the changes to the database
+db_session.commit()
 
 class Todo(db.Model):
+    
     sno = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     emp_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self) -> str:
         return f"{self.sno} - {self.name}"
-
+        
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method=='POST':
