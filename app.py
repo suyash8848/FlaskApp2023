@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import psycopg2
 
 app = Flask(__name__)
@@ -7,6 +8,7 @@ app.secret_key = '4552702f4c7988ede67653b38c73db3c6ccaf8db0092b65bd56c374a1f6608
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-db-50.postgres.database.azure.com/employee_data"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+migrate = Migrate(app, db)
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
