@@ -1,11 +1,51 @@
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
+import psycopg2.extras
+import webbrowser
+
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
+# app.secret_key = 'my_secret_key' 
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
+
+
+POSTGRES_HOST = 'localhost'
+POSTGRES_DB = 'suyash'
+POSTGRES_USER = 'postgres'
+POSTGRES_PASSWORD = 'Suyash12345'
+port_id = 5432
+conn = None
+cur = None
+
+try:
+    conn = psycopg2.connect(
+                host = POSTGRES_HOST,
+                dbname = POSTGRES_DB,
+                user = POSTGRES_USER,
+                password = POSTGRES_PASSWORD,
+                port = port_id)
+
+    cur = conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+
+    create_script = ''' CREATE TABLE IF NOT EXISTS todo(
+                            sno     int PRIMARY KEY,
+                            name   varchar(40) NOT NULL,
+                            emp_id int) '''
+
+    cur.execute(create_script)
+    conn.commit()
+
+except Exception as error:
+    print(error)
+
+finally:
+    if cur is not None:
+        cur.close()
+    if conn is not None:
+        conn.close()
 
 class Todo(db.Model):
     sno = db.Column(db.Integer, primary_key=True)
