@@ -1,10 +1,8 @@
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
-import webbrowser
 
 app = Flask(__name__)
-app.secret_key = 'my_secret_key' 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
