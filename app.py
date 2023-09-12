@@ -5,7 +5,7 @@ import webbrowser
 
 app = Flask(__name__)
 app.secret_key = 'my_secret_key' 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Flask_App_23@postgres-db-50.postgres.database.azure.com/employee_data"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Flask_App_23@postgres-db-50.postgres.database.azure.com/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
