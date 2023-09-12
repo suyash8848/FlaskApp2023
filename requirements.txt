@@ -1,6 +1,7 @@
 click
 Flask
 Flask-SQLAlchemy
+Flask-Migrate
 requests
 psycopg2
 psycopg2-binary
