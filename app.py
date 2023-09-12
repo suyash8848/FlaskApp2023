@@ -2,20 +2,18 @@ from flask import Flask, render_template, request, redirect, flash, get_flashed_
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 import psycopg2.extras
-import webbrowser
-
 
 app = Flask(__name__)
 # app.secret_key = 'my_secret_key' 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 
-POSTGRES_HOST = 'localhost'
-POSTGRES_DB = 'suyash'
-POSTGRES_USER = 'postgres'
-POSTGRES_PASSWORD = 'Suyash12345'
+POSTGRES_HOST = 'postgres-app-db.postgres.database.azure.com'
+POSTGRES_DB = 'postgres'
+POSTGRES_USER = 'empadmin'
+POSTGRES_PASSWORD = 'Flask_App_23'
 port_id = 5432
 conn = None
 cur = None
