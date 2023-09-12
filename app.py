@@ -1,37 +1,30 @@
 from sqlalchemy import create_engine, Column, Integer, String
 from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
 from flask_sqlalchemy import SQLAlchemy
-import psycopg2
-import psycopg2.extras
-import webbrowser
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-
+import psycopg2
+import psycopg2.extras
 
 
 app = Flask(__name__)
 # app.secret_key = 'my_secret_key' 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://postgres:Suyash12345@localhost/suyash"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 engine = create_engine(app.config['SQLALCHEMY_DATABASE_URI'])
 Session = sessionmaker(bind=engine)
 db_session = Session()
-
 Base = declarative_base()
 
 class Todo(Base):
     __tablename__ = 'todo'
-
     sno = Column(Integer, primary_key=True)
     name = Column(String(40), nullable=False)
     emp_id = Column(Integer)
 
-# Create the table
 Base.metadata.create_all(engine)
-
-# Commit the changes to the database
 db_session.commit()
 
 class Todo(db.Model):
