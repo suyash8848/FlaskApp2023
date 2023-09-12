@@ -3,7 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 
 app = Flask(__name__)
-app.secret_key = '4552702f4c7988ede67653b38c73db3c6ccaf8db0092b65bd56c374a1f6608da' 
 app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
