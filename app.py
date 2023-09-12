@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com/postgres"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com:5432/postgres"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
@@ -65,4 +65,4 @@ def about():
 
 
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)
