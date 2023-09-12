@@ -5,7 +5,7 @@ import psycopg2
 
 app = Flask(__name__)
 app.secret_key = '4552702f4c7988ede67653b38c73db3c6ccaf8db0092b65bd56c374a1f6608da' 
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://zdgkidttzd:Flask_Emp_23@emp-app1-server.postgres.database.azure.com/employee_data"
+app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://emp2admin:Flask_App_23@emp-app-2.postgres.database.azure.com/employee_data"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
