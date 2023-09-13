@@ -8,16 +8,16 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
-    sno = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    sno = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(200), nullable=False)
     emp_id = db.Column(db.Integer, nullable=False)
 
     def __repr__(self) -> str:
         return f"{self.sno} - {self.name}"
-
+    
 with app.app_context():
     db.create_all()
-        
+
 @app.route('/', methods=['GET', 'POST'])
 def home():
     if request.method=='POST':
@@ -28,7 +28,7 @@ def home():
         db.session.commit()
             
     
-    allTodo = Todo.query.all()
+    allTodo = Todo.query.order_by(Todo.sno).all()
     return render_template('index.html', allTodo=allTodo)
 
 
@@ -52,6 +52,7 @@ def delete(sno):
     todo = Todo.query.filter_by(sno=sno).first()
     db.session.delete(todo)
     db.session.commit()
+
     return redirect("/")
 
 @app.route('/about')
@@ -60,4 +61,5 @@ def about():
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
+
