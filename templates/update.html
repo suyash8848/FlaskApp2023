@@ -1,28 +1,50 @@
 {% extends 'base.html' %}
 {% block title %} Update{% endblock title %}
 {% block body %}
-s
 <div class="container my-3">
   <h2>Update an Employee</h2>
-  <form action="/update/{{todo.sno}}" method="POST">
+  <form action="/update/{{todo.sno}}" method="POST" onsubmit="return validateForm()">
     <div class="mb-3">
       <label for="name" class="form-label">Employee Name</label>
-      <input type="text" class="form-control" name="name" id="name" value="{{todo.name}}" aria-describedby="emailHelp"
-        pattern="[A-Za-z\s]+" title="Please enter alphabetic characters only">
+      <input type="text" class="form-control{% if nameError %} is-invalid{% endif %}" name="name" id="name"
+        value="{{todo.name}}" aria-describedby="nameError" pattern="[A-Za-z\s]+"
+        title="Please enter alphabetic characters only">
+      <div id="nameError" class="invalid-feedback">{% if nameError %}{{ nameError }}{% endif %}</div>
     </div>
     <div class="mb-3">
       <label for="emp_id" class="form-label">Employee ID</label>
-      <input type="number" class="form-control" value="{{todo.emp_id}}" name="emp_id" id="emp_id">
+      <input type="number" class="form-control{% if empIdError %} is-invalid{% endif %}" value="{{todo.emp_id}}"
+        name="emp_id" id="emp_id" aria-describedby="empIdError">
+      <div id="empIdError" class="invalid-feedback">{% if empIdError %}{{ empIdError }}{% endif %}</div>
     </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="flash-messages">
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+
+    <script>
+      function validateForm() {
+        var name = document.getElementById("name").value;
+        var emp_id = document.getElementById("emp_id").value;
+        var nameError = document.getElementById("nameError");
+        var empIdError = document.getElementById("empIdError");
+    
+        // Clear any previous error messages
+        nameError.innerHTML = "";
+        empIdError.innerHTML = "";
+    
+        if (name.trim() === "") {
+          nameError.innerHTML = "Please enter a name.";
+          nameError.style.display = "block"; // Show the error message
+          return false; // Prevent form submission
+        }
+    
+        if (emp_id.trim() === "") {
+          empIdError.innerHTML = "Please enter an employee ID.";
+          empIdError.style.display = "block"; // Show the error message
+          return false; // Prevent form submission
+        }
+    
+        return true; // Allow form submission
+      }
+    </script>
+
     <button type="submit" class="btn btn-dark">Update</button>
   </form>
 </div>
