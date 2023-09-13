@@ -14,6 +14,9 @@ class Todo(db.Model):
 
     def __repr__(self) -> str:
         return f"{self.sno} - {self.name}"
+
+with app.app_context():
+    db.create_all()
         
 @app.route('/', methods=['GET', 'POST'])
 def home():
