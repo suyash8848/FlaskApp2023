@@ -13,15 +13,7 @@
       <label for="emp_id" class="form-label">Employee ID</label>
       <input type="number" class="form-control" name="emp_id" id="emp_id">
     </div>
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-    <ul class="flash-messages">
-      {% for message in messages %}
-      <li>{{ message }}</li>
-      {% endfor %}
-    </ul>
-    {% endif %}
-    {% endwith %}
+
     <button type="submit" class="btn btn-dark">Submit</button>
   </form>
 </div>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, flash, get_flashed_messages
+from flask import Flask, render_template, request, redirect,
 from flask_sqlalchemy import SQLAlchemy
 import psycopg2
 
@@ -23,18 +23,13 @@ def home():
     if request.method=='POST':
         name = request.form['name']
         emp_id = request.form['emp_id']
-        
-        if not name or not emp_id:
-            flash('Both fields are required. Please fill them in.', 'error')
-        else:
-            todo = Todo(name=name, emp_id=emp_id)
-            db.session.add(todo)
-            db.session.commit()
+        todo = Todo(name=name, emp_id=emp_id)
+        db.session.add(todo)
+        db.session.commit()
             
     
     allTodo = Todo.query.all()
-    error_messages = get_flashed_messages(category_filter=['error'])
-    return render_template('index.html', allTodo=allTodo, error_messages=error_messages)
+    return render_template('index.html', allTodo=allTodo)
 
 
 @app.route('/update/<int:sno>', methods=['GET', 'POST'])
