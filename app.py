@@ -23,14 +23,9 @@ def home():
     if request.method=='POST':
         name = request.form['name']
         emp_id = request.form['emp_id']
-        
-        if not name or not emp_id:
-            # You can handle validation errors here without using flash
-            return render_template('index.html', error_message='Both fields are required. Please fill them in.')
-        else:
-            todo = Todo(name=name, emp_id=emp_id)
-            db.session.add(todo)
-            db.session.commit()
+        todo = Todo(name=name, emp_id=emp_id)
+        db.session.add(todo)
+        db.session.commit()
             
     
     allTodo = Todo.query.all()
@@ -42,16 +37,12 @@ def update(sno):
     if request.method=='POST':
         name = request.form['name']
         emp_id = request.form['emp_id']
-        if not name or not emp_id:
-            # You can handle validation errors here without using flash
-            return render_template('update.html', todo=todo, error_message='Both fields are required. Please fill them in.')
-        else:
-            todo = Todo.query.filter_by(sno=sno).first()
-            todo.name = name
-            todo.emp_id = emp_id
-            db.session.add(todo)
-            db.session.commit()
-            return redirect("/")
+        todo = Todo.query.filter_by(sno=sno).first()
+        todo.name = name
+        todo.emp_id = emp_id
+        db.session.add(todo)
+        db.session.commit()
+        return redirect("/")
         
     todo = Todo.query.filter_by(sno=sno).first()
     return render_template('update.html', todo=todo)
