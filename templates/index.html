@@ -17,6 +17,30 @@
     <button type="submit" class="btn btn-dark">Submit</button>
   </form>
 </div>
+<script>
+  function validateForm() {
+    var name = document.getElementById('name').value;
+    var empId = document.getElementById('emp_id').value;
+
+    // Clear previous error messages
+    document.getElementById('nameError').textContent = '';
+    document.getElementById('empIdError').textContent = '';
+
+    var isValid = true;
+
+    if (name.trim() === '') {
+      document.getElementById('nameError').textContent = 'Employee Name is required';
+      isValid = false;
+    }
+
+    if (empId.trim() === '') {
+      document.getElementById('empIdError').textContent = 'Employee ID is required';
+      isValid = false;
+    }
+
+    return isValid;
+  }
+</script>
 <div class="container my-3">
   <h2>Your Employees</h2>
 
