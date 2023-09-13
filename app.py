@@ -8,7 +8,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
-    sno = db.Column(db.Integer, primary_key=True)
+    sno = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(200), nullable=False)
     emp_id = db.Column(db.Integer, nullable=False)
 
