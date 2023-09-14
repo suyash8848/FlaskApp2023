@@ -54,11 +54,7 @@ def delete(sno):
     
     if todo_to_delete:
         db.session.delete(todo_to_delete)
-        
-        # Find all todos with sno greater than the one being deleted
         todos_to_update = Todo.query.filter(Todo.sno > sno).all()
-        
-        # Decrement the sno value for each of the todos to update
         for todo in todos_to_update:
             todo.sno -= 1
         
