@@ -1,8 +1,10 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 import os
 
 app = Flask(__name__)
+
 environment = os.environ.get('FLASK_ENV', default='development')
 
 if environment == 'development':
@@ -26,7 +28,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Todo(db.Model):
-    sno = db.Column(db.Integer, primary_key=True)
+    sno = db.Column(db.Integer, primary_key=True, unique=True)
     name = db.Column(db.String(200), nullable=False)
     emp_id = db.Column(db.Integer, nullable=False)
 
@@ -41,7 +43,11 @@ def home():
     if request.method=='POST':
         name = request.form['name']
         emp_id = request.form['emp_id']
-        todo = Todo(name=name, emp_id=emp_id)
+        
+        max_sno = db.session.query(db.func.max(Todo.sno)).scalar()
+        next_sno = (max_sno or 0) + 1
+
+        todo = Todo(sno=next_sno, name=name, emp_id=emp_id)
         db.session.add(todo)
         db.session.commit()
             
@@ -72,9 +78,11 @@ def delete(sno):
     if todo_to_delete:
         db.session.delete(todo_to_delete)
         todos_to_update = Todo.query.filter(Todo.sno > sno).all()
+        
         for todo in todos_to_update:
             todo.sno -= 1
-        
+            db.session.add(todo)
+            
         db.session.commit()
     
     return redirect("/")
