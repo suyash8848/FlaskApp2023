@@ -61,9 +61,11 @@ def update(sno):
     if request.method=='POST':
         name = request.form['name']
         emp_id = request.form['emp_id']
+
         todo = Todo.query.filter_by(sno=sno).first()
         todo.name = name
         todo.emp_id = emp_id
+        
         db.session.add(todo)
         db.session.commit()
         return redirect("/")
