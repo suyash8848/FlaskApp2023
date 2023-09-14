@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 
 app = Flask(__name__)
@@ -53,8 +54,7 @@ def delete(sno):
     db.session.delete(todo)
     db.session.commit()
 
-    db.session.execute(f"SELECT setval('todo_sno_seq', (SELECT MAX(sno) FROM todo))")
-    db.session.commit()
+    db.engine.execute(text(f"ALTER SEQUENCE todo_sno_seq RESTART WITH {sno + 1};"))
     return redirect("/")
 
 @app.route('/about')
