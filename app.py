@@ -54,7 +54,7 @@ def delete(sno):
     db.session.delete(todo)
     db.session.commit()
 
-    db.engine.execute(text(f"ALTER SEQUENCE todo_sno_seq RESTART WITH {sno + 1};"))
+    db.engine.execute(text(f"SELECT setval('todo_sno_seq', (SELECT max(sno) FROM todo));"))
     return redirect("/")
 
 @app.route('/about')
