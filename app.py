@@ -50,11 +50,20 @@ def update(sno):
 
 @app.route('/delete/<int:sno>')
 def delete(sno):
-    todo = Todo.query.filter_by(sno=sno).first()
-    db.session.delete(todo)
-    db.session.commit()
-
-    db.engine.execute(text(f"SELECT setval('todo_sno_seq', (SELECT max(sno) FROM todo));"))
+    todo_to_delete = Todo.query.filter_by(sno=sno).first()
+    
+    if todo_to_delete:
+        db.session.delete(todo_to_delete)
+        
+        # Find all todos with sno greater than the one being deleted
+        todos_to_update = Todo.query.filter(Todo.sno > sno).all()
+        
+        # Decrement the sno value for each of the todos to update
+        for todo in todos_to_update:
+            todo.sno -= 1
+        
+        db.session.commit()
+    
     return redirect("/")
 
 @app.route('/about')
