@@ -1,10 +1,27 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import text
-
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://empadmin:Flask_App_23@postgres-app-db.postgres.database.azure.com:5432/postgres"
+environment = os.environ.get('FLASK_ENV', default='development')
+
+if environment == 'development':
+    POSTGRES_HOST = 'localhost'
+    POSTGRES_DB = 'suyash'
+    POSTGRES_USER = 'postgres'
+    POSTGRES_PASSWORD = 'Suyash12345'
+    POSTGRES_PORT = 5432
+    DEBUG = True
+
+else:
+    POSTGRES_HOST = os.environ['POSTGRES_HOST_PROD']
+    POSTGRES_DB = os.environ['POSTGRES_DB_PROD']
+    POSTGRES_USER = os.environ['POSTGRES_USER_PROD']
+    POSTGRES_PASSWORD = os.environ['POSTGRES_PASSWORD_PROD']
+    POSTGRES_PORT = int(os.environ.get('POSTGRES_PORT_PROD'))
+    DEBUG = False
+    
+app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
