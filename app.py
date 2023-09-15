@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import os
+import logging
+
+logging.basicConfig(filename='app.log', level=logging.ERROR)
 
 app = Flask(__name__)
 
@@ -24,6 +27,7 @@ else:
     
 app.config['SQLALCHEMY_DATABASE_URI'] = f"postgresql://{POSTGRES_USER}:{POSTGRES_PASSWORD}@{POSTGRES_HOST}:{POSTGRES_PORT}/{POSTGRES_DB}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 
 db = SQLAlchemy(app)
 
@@ -75,19 +79,24 @@ def update(sno):
 
 @app.route('/delete/<int:sno>')
 def delete(sno):
-    todo_to_delete = Todo.query.filter_by(sno=sno).first()
-    
-    if todo_to_delete:
-        db.session.delete(todo_to_delete)
-        todos_to_update = Todo.query.filter(Todo.sno > sno).all()
+    try:
+        todo_to_delete = Todo.query.filter_by(sno=sno).first()
+
+        if todo_to_delete:
+            db.session.delete(todo_to_delete)
+            todos_to_update = Todo.query.filter(Todo.sno > sno).all()
+
+            for todo in todos_to_update:
+                todo.sno -= 1
+                db.session.add(todo)
+
+            db.session.commit()
         
-        for todo in todos_to_update:
-            todo.sno -= 1
-            db.session.add(todo)
-            
-        db.session.commit()
-    
-    return redirect("/")
+        return redirect("/")
+    except Exception as e:
+        # Log the exception for debugging purposes
+        logging.error(str(e))
+        return "An error occurred while processing your request.", 500
 
 @app.route('/about')
 def about():
