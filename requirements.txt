@@ -1,15 +1,6 @@
-click
 Flask
 Flask-SQLAlchemy
-Flask-Migrate
-requests
-psycopg2
-psycopg2-binary
 gunicorn
-itsdangerous
 jinja2
-python-dotenv
-Markupsafe
-Werkzeug
 SQLAlchemy
 
